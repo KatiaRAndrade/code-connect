@@ -104,7 +104,36 @@ Rules:
 #### Styling
 
 - Use **Tailwind CSS** exclusively. Do not write custom CSS classes for layout or spacing.
-- Tailwind config lives at `apps/web/tailwind.config.ts`; extend the theme there (colors, fonts, etc.) instead of hardcoding values inline.
+- The project uses **Tailwind v4**. Theme tokens are defined in `apps/web/src/index.css` via the `@theme` block — there is no `tailwind.config.ts`. Add new tokens there, never hardcode values inline.
+
+##### Color tokens
+
+| Token | Value | Usage |
+|---|---|---|
+| `brand` | `#81FE88` | Primary CTA buttons, active links, brand accent |
+| `brand-hover` | `#6fe376` | Hover state for brand elements |
+| `surface-bg` | `#0c1116` | Page background |
+| `surface-card` | `#161b22` | Card / panel background |
+| `surface-input` | `#21262d` | Input field background |
+| `surface-divider` | `#30363d` | Divider lines, borders |
+| `foreground` | `#e6edf3` | Primary text |
+| `muted` | `#8b949e` | Secondary/placeholder text, labels |
+
+Use tokens in Tailwind classes: `bg-brand`, `text-foreground`, `border-surface-divider`, etc. Never use raw hex values in JSX.
+
+##### Typography
+
+- Font family: **Inter** (`font-sans`) — applied globally via `body`.
+- Scale (use standard Tailwind): `text-xs` (12px), `text-sm` (14px), `text-base` (16px), `text-lg` (18px), `text-xl` (20px), `text-2xl` (24px).
+- Headings in forms/pages use `text-2xl font-bold`.
+- Body/paragraph text uses `text-sm` with `text-muted` for supporting copy.
+
+##### Spacing & sizing
+
+- Padding inside cards/panels: `p-8`.
+- Gap between form fields: `gap-4`; gap between major sections: `gap-6`.
+- Input padding: `px-3 py-2`; button padding: `px-4 py-3`.
+- Border radius: `rounded-md` for inputs and buttons; `rounded-2xl` for card containers.
 
 #### Component Tests
 

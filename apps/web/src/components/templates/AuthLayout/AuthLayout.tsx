@@ -12,9 +12,9 @@ export function AuthLayout({ banner, children }: AuthLayoutProps) {
         <div className="hidden w-[300px] shrink-0 md:block">
           {banner}
         </div>
-        <div className="flex flex-1 flex-col justify-center p-8">
+        <main id="main-content" className="flex flex-1 flex-col justify-center p-8">
           {children}
-        </div>
+        </main>
       </div>
     </div>
   )

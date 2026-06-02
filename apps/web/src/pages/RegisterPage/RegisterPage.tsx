@@ -1,9 +1,21 @@
 import { AuthLayout } from '../../components/templates/AuthLayout'
+import { RegisterForm } from '../../components/organisms/RegisterForm'
 
 export function RegisterPage() {
   return (
-    <AuthLayout banner={<div className="h-full w-full bg-surface-input" />}>
-      <p className="text-foreground">Cadastro em breve.</p>
-    </AuthLayout>
+    <>
+      <title>Cadastro — Code Connect</title>
+      <AuthLayout
+        banner={
+          <img
+            src="/banner-login.png"
+            alt="Desenvolvedora trabalhando com redes de conexão ao fundo"
+            className="h-full w-full object-cover"
+          />
+        }
+      >
+        <RegisterForm />
+      </AuthLayout>
+    </>
   )
 }

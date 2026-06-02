@@ -2,26 +2,28 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import { axe } from 'jest-axe'
-import { LoginForm } from './LoginForm'
+import { RegisterForm } from './RegisterForm'
 
-function renderLoginForm() {
+function renderRegisterForm() {
   return render(
     <MemoryRouter>
-      <LoginForm />
+      <RegisterForm />
     </MemoryRouter>
   )
 }
 
 test('imprime os dados no console ao submeter', async () => {
   const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
-  renderLoginForm()
+  renderRegisterForm()
 
-  await userEvent.type(screen.getByLabelText('Email ou usuário'), 'test@email.com')
+  await userEvent.type(screen.getByLabelText('Nome'), 'João Silva')
+  await userEvent.type(screen.getByLabelText('Email'), 'joao@email.com')
   await userEvent.type(screen.getByLabelText('Senha'), 'secret123')
-  await userEvent.click(screen.getByRole('button', { name: /login/i }))
+  await userEvent.click(screen.getByRole('button', { name: /cadastrar/i }))
 
   expect(consoleSpy).toHaveBeenCalledWith({
-    email: 'test@email.com',
+    name: 'João Silva',
+    email: 'joao@email.com',
     password: 'secret123',
     remember: false,
   })
@@ -30,6 +32,6 @@ test('imprime os dados no console ao submeter', async () => {
 })
 
 test('não tem violações de acessibilidade WCAG 2 AA', async () => {
-  const { container } = renderLoginForm()
+  const { container } = renderRegisterForm()
   expect(await axe(container)).toHaveNoViolations()
 })

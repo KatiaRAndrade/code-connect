@@ -12,7 +12,7 @@ export function SocialIconButton({ iconSrc, alt, label, onClick }: SocialIconBut
       onClick={onClick}
       className="flex flex-col items-center gap-1 rounded-md p-2 transition-colors hover:bg-surface-input"
     >
-      <img src={iconSrc} alt={alt} className="h-7 w-7" />
+      <img src={iconSrc} alt="" aria-hidden="true" className="h-7 w-7" />
       <span className="text-xs text-muted">{label}</span>
     </button>
   )
