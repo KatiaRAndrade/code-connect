@@ -5,6 +5,8 @@ import { Divider } from '../../atoms/Divider'
 import { TextLink } from '../../atoms/TextLink'
 import { FormField } from '../../molecules/FormField'
 import { SocialLoginGroup } from '../../molecules/SocialLoginGroup'
+import { useAuth } from '../../../context/AuthContext'
+import { getErrorMessage } from '../../../api/client'
 
 const SOCIAL_PROVIDERS = [
   { iconSrc: '/github.svg', alt: 'GitHub', label: 'Github' },
@@ -12,14 +14,32 @@ const SOCIAL_PROVIDERS = [
 ]
 
 export function RegisterForm() {
+  const { signUp } = useAuth()
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [remember, setRemember] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [success, setSuccess] = useState(false)
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    console.log({ name, email, password, remember })
+    setError(null)
+    setSuccess(false)
+    setSubmitting(true)
+    try {
+      await signUp({ name, email, password })
+      setSuccess(true)
+      setName('')
+      setEmail('')
+      setPassword('')
+      setRemember(false)
+    } catch (err) {
+      setError(getErrorMessage(err))
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   return (
@@ -67,8 +87,20 @@ export function RegisterForm() {
           onChange={setRemember}
         />
 
-        <Button type="submit" rightIcon="→">
-          Cadastrar
+        {error && (
+          <p role="alert" className="text-sm text-red-400">
+            {error}
+          </p>
+        )}
+
+        {success && (
+          <p role="status" className="text-sm text-brand">
+            Cadastro realizado com sucesso!
+          </p>
+        )}
+
+        <Button type="submit" disabled={submitting} rightIcon={submitting ? undefined : '→'}>
+          {submitting ? 'Cadastrando...' : 'Cadastrar'}
         </Button>
       </form>
 

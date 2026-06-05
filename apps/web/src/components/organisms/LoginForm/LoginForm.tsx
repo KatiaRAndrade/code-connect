@@ -5,6 +5,8 @@ import { TextLink } from '../../atoms/TextLink'
 import { FormField } from '../../molecules/FormField'
 import { RememberMeRow } from '../../molecules/RememberMeRow'
 import { SocialLoginGroup } from '../../molecules/SocialLoginGroup'
+import { useAuth } from '../../../context/AuthContext'
+import { getErrorMessage } from '../../../api/client'
 
 const SOCIAL_PROVIDERS = [
   { iconSrc: '/github.svg', alt: 'GitHub', label: 'Github' },
@@ -12,13 +14,27 @@ const SOCIAL_PROVIDERS = [
 ]
 
 export function LoginForm() {
+  const { signIn } = useAuth()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [remember, setRemember] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [success, setSuccess] = useState(false)
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    console.log({ email, password, remember })
+    setError(null)
+    setSuccess(false)
+    setSubmitting(true)
+    try {
+      await signIn({ email, password })
+      setSuccess(true)
+    } catch (err) {
+      setError(getErrorMessage(err))
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   return (
@@ -51,8 +67,20 @@ export function LoginForm() {
 
         <RememberMeRow checked={remember} onChange={setRemember} />
 
-        <Button type="submit" rightIcon="→">
-          Login
+        {error && (
+          <p role="alert" className="text-sm text-red-400">
+            {error}
+          </p>
+        )}
+
+        {success && (
+          <p role="status" className="text-sm text-brand">
+            Login realizado com sucesso!
+          </p>
+        )}
+
+        <Button type="submit" disabled={submitting} rightIcon={submitting ? undefined : '→'}>
+          {submitting ? 'Entrando...' : 'Login'}
         </Button>
       </form>
 
