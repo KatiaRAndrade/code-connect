@@ -1,6 +1,9 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { LoginPage } from './pages/LoginPage'
 import { RegisterPage } from './pages/RegisterPage'
+import { FeedPage } from './pages/FeedPage'
+import { PostDetailPage } from './pages/PostDetailPage'
+import { CreatePostPage } from './pages/CreatePostPage'
 
 function App() {
   return (
@@ -12,7 +15,10 @@ function App() {
         Pular para o conteúdo
       </a>
       <Routes>
-        <Route path="/" element={<Navigate to="/login" replace />} />
+        <Route path="/" element={<Navigate to="/feed" replace />} />
+        <Route path="/feed" element={<FeedPage />} />
+        <Route path="/posts/:id" element={<PostDetailPage />} />
+        <Route path="/nova-publicacao" element={<CreatePostPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/cadastro" element={<RegisterPage />} />
       </Routes>
