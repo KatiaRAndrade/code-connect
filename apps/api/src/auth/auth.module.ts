@@ -4,6 +4,7 @@ import { UsersModule } from '../users/users.module';
 import { AuthController } from './auth.controller';
 import { AuthGuard } from './auth.guard';
 import { AuthService } from './auth.service';
+import { OptionalAuthGuard } from './optional-auth.guard';
 import { JWT_SECRET } from './auth.constants';
 
 @Module({
@@ -12,6 +13,7 @@ import { JWT_SECRET } from './auth.constants';
     JwtModule.register({ secret: JWT_SECRET, signOptions: { expiresIn: '1d' } }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, AuthGuard],
+  providers: [AuthService, AuthGuard, OptionalAuthGuard],
+  exports: [AuthGuard, OptionalAuthGuard, JwtModule],
 })
 export class AuthModule {}

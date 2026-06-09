@@ -9,6 +9,7 @@
     "api:build": "pnpm --filter api build",
     "api:start": "pnpm --filter api start:prod",
     "api:test": "pnpm --filter api test",
+    "api:seed": "pnpm --filter api exec ts-node -r tsconfig-paths/register src/seed.ts",
     "dev": "pnpm --parallel --filter web --filter api run dev"
   },
   "devDependencies": {}
