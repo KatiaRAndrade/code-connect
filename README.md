@@ -16,6 +16,7 @@ code-connect/
 
 - [Node.js](https://nodejs.org/) 20+
 - [pnpm](https://pnpm.io/) 8+
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) (banco de dados PostgreSQL)
 
 ## Instalação
 
@@ -23,17 +24,34 @@ code-connect/
 pnpm install
 ```
 
+## Banco de dados (PostgreSQL via Docker)
+
+```sh
+# Sobe o Postgres em segundo plano
+docker compose up -d
+
+# Verifica se o container está saudável
+docker compose ps
+
+# Popula o banco com usuários e posts de exemplo
+pnpm api:seed
+
+# Para o container
+docker compose down
+```
+
 ## Desenvolvimento
 
 ```sh
-# Roda web e API em paralelo
+# 1. Suba o banco (se ainda não estiver rodando)
+docker compose up -d
+
+# 2. Roda web e API em paralelo
 pnpm dev
 
-# Apenas o frontend
-pnpm web:dev
-
-# Apenas a API
-pnpm api:dev
+# Ou separadamente:
+pnpm web:dev   # apenas o frontend (http://localhost:5173)
+pnpm api:dev   # apenas a API (http://localhost:3000)
 ```
 
 ## Build
@@ -55,6 +73,28 @@ pnpm --filter web test:coverage
 # API (Jest)
 pnpm api:test
 pnpm --filter api test:e2e
+```
+
+### E2E (Playwright)
+
+Pré-requisito: banco de dados rodando e populado (`docker compose up -d` + `pnpm api:seed`), e idealmente `pnpm dev` já em execução — o Playwright reaproveita o servidor ativo ou sobe um novo automaticamente.
+
+```sh
+# Roda todos os testes e2e (headless)
+pnpm web:test:e2e
+# equivalente a: pnpm --filter web test:e2e
+
+# Modo UI interativo (timeline, replay, debug visual)
+pnpm --filter web test:e2e:ui
+
+# Modo headed — abre o navegador na tela
+pnpm --filter web exec playwright test --headed
+
+# Modo debug passo a passo (Playwright Inspector)
+pnpm --filter web exec playwright test --debug
+
+# Abre o relatório HTML do último run
+pnpm --filter web exec playwright show-report
 ```
 
 ## Lint e formatação
