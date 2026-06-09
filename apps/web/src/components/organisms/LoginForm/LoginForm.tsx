@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Button } from '../../atoms/Button'
 import { Divider } from '../../atoms/Divider'
 import { TextLink } from '../../atoms/TextLink'
@@ -15,6 +16,7 @@ const SOCIAL_PROVIDERS = [
 
 export function LoginForm() {
   const { signIn } = useAuth()
+  const navigate = useNavigate()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [remember, setRemember] = useState(false)
@@ -30,6 +32,7 @@ export function LoginForm() {
     try {
       await signIn({ email, password })
       setSuccess(true)
+      navigate('/feed', { replace: true })
     } catch (err) {
       setError(getErrorMessage(err))
     } finally {
